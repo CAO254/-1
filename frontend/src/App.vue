@@ -45,6 +45,7 @@
     </aside>
 
     <div class="app-main">
+      <SceneryBackground variant="soft" />
       <header class="app-header">
         <div>{{ pageTitle }}</div>
         <div v-if="authState.user">
@@ -68,6 +69,7 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { authState, clearAuth } from '@/store/user'
+import SceneryBackground from '@/components/SceneryBackground.vue'
 
 const route = useRoute()
 const router = useRouter()

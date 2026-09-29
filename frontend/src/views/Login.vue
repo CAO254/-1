@@ -1,6 +1,7 @@
 <!-- [工单17] 人工智能NLP-Agent数字人项目-教育智能体-智能备课任务 —— 登录 / 注册页 -->
 <template>
   <div class="login-wrap">
+    <SceneryBackground variant="full" />
     <el-card class="login-card">
       <h2 style="margin: 0 0 4px">AI教育平台</h2>
       <p style="margin: 0 0 20px; color: #909399; font-size: 13px">
@@ -25,6 +26,10 @@
             <el-button type="primary" :loading="loading" style="width: 100%" @click="handleLogin">
               登录
             </el-button>
+            <div class="demo-tip">
+              <span>演示教师账号：demo_teacher / demo123456</span>
+              <el-link type="primary" :underline="false" @click="fillDemo">一键填充</el-link>
+            </div>
           </el-form>
         </el-tab-pane>
 
@@ -80,6 +85,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { login, register } from '@/api/auth'
 import { setAuth } from '@/store/user'
+import SceneryBackground from '@/components/SceneryBackground.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -99,6 +105,12 @@ function afterLogin(data) {
   setAuth(data.access_token, data.user)
   ElMessage.success(`欢迎，${data.user.display_name || data.user.username}`)
   router.push(route.query.redirect || '/lesson')
+}
+
+function fillDemo() {
+  tab.value = 'login'
+  loginForm.username = 'demo_teacher'
+  loginForm.password = 'demo123456'
 }
 
 async function handleLogin() {
@@ -140,15 +152,36 @@ async function handleRegister() {
 
 <style scoped>
 .login-wrap {
+  position: relative;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #001529 0%, #003a70 100%);
+  overflow: hidden;
+  background: linear-gradient(135deg, #2b1230 0%, #6e3226 100%);
 }
 
 .login-card {
+  position: relative;
+  z-index: 1;
   width: 420px;
   padding: 8px 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 24px 60px rgba(80, 30, 20, 0.45);
+}
+
+.demo-tip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #fdf3e7;
+  font-size: 12px;
+  color: #8a5a2a;
 }
 </style>

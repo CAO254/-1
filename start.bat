@@ -1,29 +1,28 @@
 @echo off
 chcp 65001 >nul
-title 教育数字人 - 启动器
 cd /d "%~dp0"
 
 echo ============================================
-echo   教育数字人 一键启动
+echo   Education Agent Start
 echo ============================================
 
-REM ---- 启动后端 ----
-where python >nul 2>nul
-if exist "backend\venv\Scripts\python.exe" (
-    set "PY=backend\venv\Scripts\python.exe"
-) else (
-    set "PY=python"
-)
-echo [1/2] 启动后端 (8000)...
-start "后端-8000" cmd /k "cd /d %~dp0backend && %PY% -m uvicorn app.main:app --port 8000 --log-level warning"
+set "PY=%~dp0backend\venv\Scripts\python.exe"
+if not exist "%PY%" set "PY=python"
 
-REM ---- 启动前端 ----
-echo [2/2] 启动前端 (5173)...
-start "前端-5173" cmd /k "cd /d %~dp0frontend && npm run dev"
+echo [1/2] Starting backend (8000)...
+start "Backend-8000" /D "%~dp0backend" cmd /k ""%PY%" -m uvicorn app.main:app --port 8000 --log-level warning"
 
-timeout /t 6 /nobreak >nul
+echo [2/2] Starting frontend (5173)...
+start "Frontend-5173" /D "%~dp0frontend" cmd /k "npm run dev"
+
+echo Waiting for startup...
+timeout /t 8 /nobreak >nul
+
+echo Opening browser...
+start "" "http://localhost:5173"
+
 echo.
-echo 后端: http://127.0.0.1:8000/docs
-echo 前端: http://localhost:5173
-echo.
+echo Backend : http://127.0.0.1:8000/docs
+echo Frontend: http://localhost:5173
+echo Stop    : run stop.bat
 pause
